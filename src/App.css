@@ -46,8 +46,25 @@
   border: none;
 }
 
+.tile.correct {
+  background: var(--correct-letter);
+  color: white;
+  border: none;
+}
+
+.tile.wrong-position {
+  background: var(--found-letter);
+  color: white;
+  border: none;
+}
+
+.tile.incorrect {
+  background: var(--letter-not-found);
+  border: none;
+}
+
 .tile[aria-disabled="true"] {
-  background: rgb(245, 224, 224);
-  pointer-events: none;
-  cursor: not-allowed;
+  background: rgb(245, 224, 224) !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
 }
