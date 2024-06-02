@@ -20,6 +20,11 @@
   justify-content: center;
   gap: 8px;
   flex-direction: column;
+  position: relative;
+}
+
+.boardWrapper {
+  position: relative;
 }
 
 .line {
@@ -28,8 +33,8 @@
 }
 
 .tile {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border: 0.5px solid var(--tile-border);
   background: var(--tile-background);
   border-radius: 4px;
@@ -67,4 +72,64 @@
   background: rgb(245, 224, 224) !important;
   pointer-events: none !important;
   cursor: not-allowed !important;
+}
+
+/* ORDER IS IMPORTANT HERE */
+.tile[data-defaultWrong="true"] {
+  background: var(--letter-not-found) !important;
+}
+
+.btn {
+  border: none;
+  display: inline-block;
+  padding: 12px 52px;
+  color: white;
+  background-color: var(--correct-letter);
+  font-weight: 900;
+  font-size: 20px;
+  border-radius: 10px;
+  margin-top: 14px;
+  cursor: pointer;
+}
+
+.btn-reset {
+  position: fixed;
+  right: 10px;
+  top: 0;
+}
+
+.loader {
+  width: 55px;
+  aspect-ratio: 1;
+  --g1: conic-gradient(
+    from 90deg at 3px 3px,
+    #0000 90deg,
+    var(--active-tile) 0
+  );
+  --g2: conic-gradient(
+    from -90deg at 22px 22px,
+    #0000 90deg,
+    var(--active-tile) 0
+  );
+  background: var(--g1), var(--g1), var(--g1), var(--g2), var(--g2), var(--g2);
+  background-size: 25px 25px;
+  background-repeat: no-repeat;
+  animation: l7 1.5s infinite;
+}
+@keyframes l7 {
+  0% {
+    background-position: 0 0, 0 100%, 100% 100%;
+  }
+  25% {
+    background-position: 100% 0, 0 100%, 100% 100%;
+  }
+  50% {
+    background-position: 100% 0, 0 0, 100% 100%;
+  }
+  75% {
+    background-position: 100% 0, 0 0, 0 100%;
+  }
+  100% {
+    background-position: 100% 100%, 0 0, 0 100%;
+  }
 }

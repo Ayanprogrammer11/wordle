@@ -1,12 +1,20 @@
-import { useCallback, useEffect, useReducer, useMemo } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import "./App.css";
 import Line from "./Line";
+import { generateRandomWord } from "./utils";
 
 const API_URL =
-  "https://random-word-api.herokuapp.com/word?number=100&length=5";
+  "https://random-word-api.herokuapp.com/word?number=30&length=5&lang=es";
 
 function reducer(state, action) {
   switch (action.type) {
+    case "word/set": {
+      return {
+        ...state,
+        solution: action.payload,
+        status: "playing",
+      };
+    }
     case "board/input": {
       let keyEntered;
       if (action.payload.code.startsWith("Key"))
@@ -38,6 +46,9 @@ function reducer(state, action) {
 
       if (state.currentGuess.line < 6) {
         const currentWord = state.guesses[state.currentGuess.line];
+        // if (state.solution === currentWord && state.currentGuess.line === 5) {
+        //   return { ...state, gameOver: true };
+        // }
         if (state.solution === currentWord) {
           console.log("WIN!");
           return {
@@ -45,14 +56,24 @@ function reducer(state, action) {
             gameOver: true,
             currentGuess: {
               ...state.currentGuess,
-              line: state.currentGuess.line + 1,
+              line: Infinity,
               tile: 0,
             },
           };
         }
 
         if (state.currentGuess.line === 5) {
-          return { ...state, gameOver: true };
+          return {
+            ...state,
+            gameOver: true,
+            currentGuess: {
+              ...state.currentGuess,
+              // Using infinity to make the coloring of the last line work because the line state variable should be greater than line which needs to be colored after hitting Enter.
+              // I used Infinity rather than a constant number to prevent this from looking a magic number, and for many other beenfits.
+              line: Infinity,
+              tile: 0,
+            },
+          };
         }
 
         console.log("SHIFTING TO NEXT LINE");
@@ -112,14 +133,18 @@ const initialState = {
     tile: 0,
   },
   gameOver: false,
-  solution: "HELLO",
+  status: "playing",
+  solution: generateRandomWord(),
 };
 
 export default function App() {
-  const [{ guesses, currentGuess, solution, gameOver }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ guesses, currentGuess, solution, gameOver, status }, dispatch] =
+    useReducer(reducer, initialState);
+
+  function handleReset() {
+    dispatch({ type: "reset" });
+    dispatch({ type: "word/set", payload: generateRandomWord() });
+  }
 
   const handleInput = useCallback(
     (e) => {
@@ -146,22 +171,27 @@ export default function App() {
   }, [gameOver, handleInput]);
 
   return (
-    <div className="app">
-      <div className="board">
-        {guesses.map((guess, i) => (
-          <Line
-            guess={guess}
-            index={i}
-            key={i}
-            currentGuess={currentGuess}
-            solution={solution}
-            gameOver={gameOver}
-          />
-        ))}
+    <>
+      <div className="app">
+        <div className="board">
+          {status === "playing" &&
+            guesses.map((guess, i) => (
+              <Line
+                guess={guess}
+                index={i}
+                key={i}
+                currentGuess={currentGuess}
+                solution={solution}
+                gameOver={gameOver}
+              />
+            ))}
+        </div>
+        {gameOver && (
+          <button onClick={handleReset} className="btn btn-reset">
+            Reset
+          </button>
+        )}
       </div>
-      {gameOver && (
-        <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
-      )}
-    </div>
+    </>
   );
 }
