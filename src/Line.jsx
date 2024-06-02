@@ -38,20 +38,27 @@ function Line({ guess, currentGuess, index, gameOver, solution }) {
           } else {
             className += " incorrect";
           }
+          // LOGIC FOR ACTIVE TILE COLOR ACTIVATION
         } else if (
+          currentGuess.tile > 0 && // Check if the user has started typing
           index === currentGuess.line &&
-          i === currentGuess.tile &&
-          !gameOver
-        ) {
-          className += " active";
-        } else if (
-          index === currentGuess.line &&
-          i + 1 === 5 &&
-          currentGuess.tile === 5 &&
+          i ===
+            (currentGuess.tile > 0
+              ? currentGuess.tile - 1
+              : currentGuess.tile) &&
           !gameOver
         ) {
           className += " active";
         }
+        // LOGIC FOR ACTIVE TILE COLOR ACTIVATION FOR THE LAST TILE
+        // else if (
+        //   index === currentGuess.line &&
+        //   i + 1 === 5 &&
+        //   currentGuess.tile === 5 &&
+        //   !gameOver
+        // ) {
+        //   className += " active";
+        // }
 
         return (
           <div className={className} key={i}>

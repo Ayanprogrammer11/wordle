@@ -1,4 +1,4 @@
-const words = [
+export const words = [
   "apple",
   "brave",
   "charm",
@@ -274,6 +274,39 @@ const words = [
   "xerox",
   "young",
   "zesty",
+];
+
+// The keyboard will be represented by an array of objects, where each object contains information about 1 keystroke
+export const keyboard = [
+  { key: "Q" },
+  { key: "W" },
+  { key: "E" },
+  { key: "R" },
+  { key: "T" },
+  { key: "Y" },
+  { key: "U" },
+  { key: "I" },
+  { key: "O" },
+  { key: "P" },
+  { key: "A" },
+  { key: "S" },
+  { key: "D" },
+  { key: "F" },
+  { key: "G" },
+  { key: "H" },
+  { key: "J" },
+  { key: "K" },
+  { key: "L" },
+  //    "special" enclosed within $ is an indication to the program that a icon should be displayed instead of the key
+  { key: "$special$", code: "Backspace" },
+  { key: "Z" },
+  { key: "X" },
+  { key: "C" },
+  { key: "V" },
+  { key: "B" },
+  { key: "N" },
+  { key: "M" },
+  { key: "Enter", code: "Enter" },
 ];
 
 export function generateRandomWord() {

@@ -1,12 +1,31 @@
 import { useCallback, useEffect, useReducer } from "react";
 import "./App.css";
 import Line from "./Line";
-import { generateRandomWord } from "./utils";
+import { generateRandomWord, words } from "./utils";
+import Keyboard from "./Keyboard";
 
 const API_URL =
   "https://random-word-api.herokuapp.com/word?number=30&length=5&lang=es";
 
 function reducer(state, action) {
+  function putInput(keyEntered) {
+    if (state.currentGuess.tile < 5) {
+      let guessCopy = [...state.guesses];
+      guessCopy[state.currentGuess.line] += keyEntered;
+      console.log("KEY ENTERED:", keyEntered);
+
+      return {
+        ...state,
+        currentGuess: {
+          ...state.currentGuess,
+          tile: state.currentGuess.tile + 1,
+        },
+        guesses: guessCopy,
+      };
+    }
+
+    return state;
+  }
   switch (action.type) {
     case "word/set": {
       return {
@@ -16,39 +35,37 @@ function reducer(state, action) {
       };
     }
     case "board/input": {
+      if (action.payload.isNative === false) {
+        return putInput(action.payload.keystroke);
+      }
+      // AVOIDING SPAM
+      if (action.payload.repeat) return { ...state };
       let keyEntered;
       if (action.payload.code.startsWith("Key"))
         keyEntered = action.payload.code.slice(3);
       if (!keyEntered) return state;
 
-      if (state.currentGuess.tile < 5) {
-        let guessCopy = [...state.guesses];
-        guessCopy[state.currentGuess.line] += keyEntered;
-        console.log("KEY ENTERED:", keyEntered);
-
-        return {
-          ...state,
-          currentGuess: {
-            ...state.currentGuess,
-            tile: state.currentGuess.tile + 1,
-          },
-          guesses: guessCopy,
-        };
-      }
-
-      return state;
+      return putInput(keyEntered);
     }
     case "board/enter": {
+      // Return if the user presses enter before completing a line
       if (state.currentGuess.tile !== 5) {
         console.log("NO ENTER BEFORE COMPLETING A LINE");
         return state;
       }
 
+      // Return if no word is found in the word bank
+      if (
+        !words.some(
+          (word) =>
+            state.guesses[state.currentGuess.line] === word.toUpperCase()
+        )
+      ) {
+        console.log("NO WORD FOUND!");
+        return { ...state };
+      }
       if (state.currentGuess.line < 6) {
         const currentWord = state.guesses[state.currentGuess.line];
-        // if (state.solution === currentWord && state.currentGuess.line === 5) {
-        //   return { ...state, gameOver: true };
-        // }
         if (state.solution === currentWord) {
           console.log("WIN!");
           return {
@@ -185,6 +202,7 @@ export default function App() {
                 gameOver={gameOver}
               />
             ))}
+          <Keyboard dispatch={dispatch} />
         </div>
         {gameOver && (
           <button onClick={handleReset} className="btn btn-reset">

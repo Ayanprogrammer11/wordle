@@ -1,10 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
 :root {
   --tile-background: #fbfcff;
-  --tile-border: #393e4c;
+  --tile-border: #dee1e9;
   --found-letter: #f3c237;
   --letter-not-found: #a4aec4;
   --correct-letter: #79b851;
-  --active-tile: #93d36c;
+  --active-tile: #a7adc0;
+
+  --keystroke-background: #dce1ed;
+  --keystroke-hover-background: #c4cbdd;
 }
 
 .App {
@@ -18,7 +33,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7.5px;
   flex-direction: column;
   position: relative;
 }
@@ -29,20 +44,21 @@
 
 .line {
   display: flex;
-  gap: 5px;
+  gap: 7.5px;
 }
 
 .tile {
-  width: 60px;
-  height: 60px;
-  border: 0.5px solid var(--tile-border);
+  width: 52px;
+  height: 52px;
+  box-shadow: inset 0 0 0 2px var(--tile-border);
   background: var(--tile-background);
-  border-radius: 4px;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: sans-serif;
   font-size: 24px;
+  font-weight: 600;
   transition: background-color 0.5s;
 }
 
@@ -55,17 +71,21 @@
   background: var(--correct-letter);
   color: white;
   border: none;
+  box-shadow: none;
 }
 
 .tile.wrong-position {
   background: var(--found-letter);
   color: white;
   border: none;
+  box-shadow: none;
 }
 
 .tile.incorrect {
   background: var(--letter-not-found);
   border: none;
+  box-shadow: none;
+  color: white;
 }
 
 .tile[aria-disabled="true"] {
@@ -96,6 +116,44 @@
   position: fixed;
   right: 10px;
   top: 0;
+}
+/* --------- */
+.keyboard {
+  margin-top: 50px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  column-gap: 6px;
+  row-gap: 10px;
+}
+
+.key-stroke {
+  background: var(--keystroke-background);
+  display: flex;
+  min-width: 30px;
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  min-height: 43px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.key-stroke[data-isSpecial="true"] {
+  grid-column: span 2;
+  grid-row: 3 / 4;
+}
+
+.key-stroke:last-child {
+  grid-column: -3 / -1;
+}
+
+.key-stroke:hover {
+  background: var(--keystroke-hover-background);
 }
 
 .loader {
@@ -131,5 +189,18 @@
   }
   100% {
     background-position: 100% 100%, 0 0, 0 100%;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .key-stroke {
+    min-width: 55px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .key-stroke {
+    min-width: 65px;
+    font-size: 20px;
   }
 }
