@@ -99,8 +99,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Acknowledgements
 
 - Thanks to the original Wordle game for the inspiration.
-- Icons made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com).
 
 ## Contact
 
-For any questions or suggestions, feel free to open an issue or contact me at [your.email@example.com](mailto:your.email@example.com).
+For any questions or suggestions, feel free to open an issue or contact me at [ayanliaqat48@gmail.com](mailto:ayanliaqat48@gmail.com)
