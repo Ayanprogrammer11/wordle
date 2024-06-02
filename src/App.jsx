@@ -55,15 +55,15 @@ function reducer(state, action) {
       }
 
       // Return if no word is found in the word bank
-      if (
-        !words.some(
-          (word) =>
-            state.guesses[state.currentGuess.line] === word.toUpperCase()
-        )
-      ) {
-        console.log("NO WORD FOUND!");
-        return { ...state };
-      }
+      // if (
+      //   !words.some(
+      //     (word) =>
+      //       state.guesses[state.currentGuess.line] === word.toUpperCase()
+      //   )
+      // ) {
+      //   console.log("NO WORD FOUND!");
+      //   return { ...state };
+      // }
       if (state.currentGuess.line < 6) {
         const currentWord = state.guesses[state.currentGuess.line];
         if (state.solution === currentWord) {
