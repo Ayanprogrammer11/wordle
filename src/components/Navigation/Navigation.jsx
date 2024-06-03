@@ -11,7 +11,7 @@ function Navigation({ onReset }) {
   return (
     <nav className="nav">
       <div className="nav__utils">
-        <div className="nav__additional">
+        {/* <div className="nav__additional">
           <div className="nav__settings">
             <Button className="nav__btn btn">
               <IoSettingsSharp className="icons" />
@@ -30,7 +30,7 @@ function Navigation({ onReset }) {
               <span>Give up</span>
             </Button>
           </div>
-        </div>
+        </div> */}
 
         <div className="nav__main">
           <div className="new-game">
