@@ -1,13 +1,13 @@
 # Wordle Clone in React
 
-A simple Wordle game clone built with React. This project is a fun and interactive way to test your vocabulary skills by guessing a five-letter word within six attempts.
+Wordle game clone built with React. This project is a fun and interactive way to test your vocabulary skills by guessing a five-letter word within six attempts.
 
 ## Features
 
 - **Interactive Gameplay**: Users can guess the word by typing letters, and the game provides feedback by changing the colors of the tiles.
-- **Responsive Design**: Optimized for both desktop and mobile devices. (_TODO_)
+- **Responsive Design**: Optimized for both desktop and mobile devices.
 - **Word Validation**: Ensures that the guessed words are valid five-letter words.
-- **Game Logic**: Includes win/loss conditions and displays appropriate messages. (_TODO_)
+- **Game Logic**: Includes win/loss conditions
 
 ## Demo
 
@@ -47,12 +47,12 @@ Follow these steps to set up the project locally:
   - **Green**: Correct letter in the correct position.
   - **Yellow**: Correct letter in the wrong position.
   - **Gray**: Incorrect letter.
+- The keyboard will also indicate which letter was guessed at wrong position and which one at the correct one.
 - Keep guessing until you find the correct word or exhaust your six attempts.
 
 ## Technologies Used
 
 - **React**: For building the user interface.
-- **React Query**: (_TODO_) For fetching data
 - **JavaScript**: Programming language for logic.
 - **CSS**: For styling the application.
 - **React Hooks**: For managing state and side effects.
@@ -67,7 +67,7 @@ Contributions are welcome! Follow these steps to contribute:
 2. **Clone your fork**:
 
    ```bash
-   git clone https://github.com/yourusername/wordle-clone-react.git
+   git clone https://github.com/Ayanprogrammer11/wordle.git
    cd wordle-clone-react
    ```
 

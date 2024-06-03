@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useReducer } from "react";
 import "./App.css";
 import Line from "./Line";
-import { generateRandomWord, words } from "./utils";
+import { generateRandomWord } from "./utils";
 import Keyboard from "./Keyboard";
-
-const API_URL =
-  "https://random-word-api.herokuapp.com/word?number=30&length=5&lang=es";
+import Navigation from "./components/Navigation/Navigation";
+import { ACTION_TYPES } from "./actions/index";
 
 function reducer(state, action) {
   function putInput(keyEntered) {
@@ -27,14 +26,14 @@ function reducer(state, action) {
     return state;
   }
   switch (action.type) {
-    case "word/set": {
+    case ACTION_TYPES.SET_WORD: {
       return {
         ...state,
         solution: action.payload,
         status: "playing",
       };
     }
-    case "board/input": {
+    case ACTION_TYPES.INPUT: {
       if (action.payload.isNative === false) {
         return putInput(action.payload.keystroke);
       }
@@ -47,23 +46,13 @@ function reducer(state, action) {
 
       return putInput(keyEntered);
     }
-    case "board/enter": {
+    case ACTION_TYPES.ENTER: {
       // Return if the user presses enter before completing a line
       if (state.currentGuess.tile !== 5) {
         console.log("NO ENTER BEFORE COMPLETING A LINE");
         return state;
       }
 
-      // Return if no word is found in the word bank
-      // if (
-      //   !words.some(
-      //     (word) =>
-      //       state.guesses[state.currentGuess.line] === word.toUpperCase()
-      //   )
-      // ) {
-      //   console.log("NO WORD FOUND!");
-      //   return { ...state };
-      // }
       if (state.currentGuess.line < 6) {
         const currentWord = state.guesses[state.currentGuess.line];
         if (state.solution === currentWord) {
@@ -71,6 +60,7 @@ function reducer(state, action) {
           return {
             ...state,
             gameOver: true,
+            status: "win",
             currentGuess: {
               ...state.currentGuess,
               line: Infinity,
@@ -83,6 +73,7 @@ function reducer(state, action) {
           return {
             ...state,
             gameOver: true,
+            status: "lose",
             currentGuess: {
               ...state.currentGuess,
               // Using infinity to make the coloring of the last line work because the line state variable should be greater than line which needs to be colored after hitting Enter.
@@ -106,7 +97,7 @@ function reducer(state, action) {
 
       return state;
     }
-    case "board/deleteInput": {
+    case ACTION_TYPES.DELETE_INPUT: {
       if (state.currentGuess.tile === 0) {
         console.log("NO CHARS TO DELETE");
         return state;
@@ -127,7 +118,8 @@ function reducer(state, action) {
       };
     }
 
-    case "reset": {
+    case ACTION_TYPES.RESET: {
+      if (state.guesses.every((guess) => guess === "")) return state;
       return {
         ...state,
         guesses: Array(6).fill(""),
@@ -136,6 +128,14 @@ function reducer(state, action) {
           tile: 0,
         },
         gameOver: false,
+        status: "playing",
+        lettersStatus: [],
+      };
+    }
+    case ACTION_TYPES.LETTERS_STATUS: {
+      return {
+        ...state,
+        lettersStatus: [...state.lettersStatus, action.payload],
       };
     }
     default:
@@ -150,30 +150,35 @@ const initialState = {
     tile: 0,
   },
   gameOver: false,
+  // Different statuses: "playing", "win", "lose"
   status: "playing",
   solution: generateRandomWord(),
+  //  {status: "", letter: ""}
+  lettersStatus: [],
 };
 
 export default function App() {
-  const [{ guesses, currentGuess, solution, gameOver, status }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { guesses, currentGuess, solution, gameOver, lettersStatus },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   function handleReset() {
-    dispatch({ type: "reset" });
-    dispatch({ type: "word/set", payload: generateRandomWord() });
+    dispatch({ type: ACTION_TYPES.RESET });
+    dispatch({ type: ACTION_TYPES.SET_WORD, payload: generateRandomWord() });
   }
 
   const handleInput = useCallback(
     (e) => {
       if (e.code === "Enter") {
-        dispatch({ type: "board/enter", payload: e });
+        dispatch({ type: ACTION_TYPES.ENTER, payload: e });
         return;
       }
       if (e.code === "Backspace") {
-        dispatch({ type: "board/deleteInput", payload: e });
+        dispatch({ type: ACTION_TYPES.DELETE_INPUT, payload: e });
         return;
       }
-      dispatch({ type: "board/input", payload: e });
+      dispatch({ type: ACTION_TYPES.INPUT, payload: e });
     },
     [dispatch]
   );
@@ -190,25 +195,26 @@ export default function App() {
   return (
     <>
       <div className="app">
+        <Navigation onReset={handleReset} />
         <div className="board">
-          {status === "playing" &&
-            guesses.map((guess, i) => (
-              <Line
-                guess={guess}
-                index={i}
-                key={i}
-                currentGuess={currentGuess}
-                solution={solution}
-                gameOver={gameOver}
-              />
-            ))}
-          <Keyboard dispatch={dispatch} />
+          {guesses.map((guess, i) => (
+            <Line
+              guess={guess}
+              index={i}
+              key={i}
+              currentGuess={currentGuess}
+              solution={solution}
+              gameOver={gameOver}
+              dispatch={dispatch}
+              lettersStatus={lettersStatus}
+            />
+          ))}
+          <Keyboard
+            dispatch={dispatch}
+            gameOver={gameOver}
+            lettersStatus={lettersStatus}
+          />
         </div>
-        {gameOver && (
-          <button onClick={handleReset} className="btn btn-reset">
-            Reset
-          </button>
-        )}
       </div>
     </>
   );

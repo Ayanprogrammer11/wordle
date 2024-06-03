@@ -1,0 +1,39 @@
+.btn {
+  border: none;
+  background: var(--btn-background);
+  color: var(--icons-color);
+  padding: 8px 16px;
+  margin: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.btn:hover .icons {
+  color: #57ac57;
+}
+
+.btn:hover {
+  background-color: #e6f3e6;
+}
+
+.btn span {
+  display: none;
+}
+
+.btn-reset {
+  position: fixed;
+  right: 10px;
+  top: 0;
+}
+
+@media screen and (min-width: 640px) {
+  .btn span {
+    display: initial;
+  }
+}
