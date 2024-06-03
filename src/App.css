@@ -67,7 +67,7 @@ body {
   transition: background-color 0.5s;
 }
 
-tile.active {
+.tile.active {
   box-shadow: inset 0 0 0 2px var(--active-tile);
   border: none;
 }
