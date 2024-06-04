@@ -11,20 +11,43 @@ body {
 }
 
 :root {
-  --tile-background: #fbfcff;
-  --tile-border: #dee1e9;
+  --correct-letter: #79b851;
   --found-letter: #f3c237;
   --letter-not-found: #a4aec4;
-  --correct-letter: #79b851;
+  --tile-background: #fbfcff;
+  --tile-border: #dee1e9;
   --active-tile: #a7adc0;
 
   --keystroke-background: #dce1ed;
-  --text-color: #363e52;
   --keystroke-hover-background: #c4cbdd;
 
   --icons-color: #414a5e;
 
   --btn-background: #ebedf3;
+
+  --bg-color: #fff;
+  --text-color: #363e52;
+}
+
+html.dark:root {
+  --tile-background: #1e1e1e;
+  --tile-border: #2d2d2d;
+  --active-tile: #454545;
+
+  --keystroke-background: #303030;
+  --text-color: #d4d4d4;
+  --keystroke-hover-background: #3e3e3e;
+
+  --icons-color: #a0a0a0;
+
+  --btn-background: #2b2b2b;
+  --bg-color: #1e1e1e;
+  --text-color: #d4d4d4;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
 .App {

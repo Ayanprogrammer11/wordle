@@ -6,4 +6,5 @@ export const ACTION_TYPES = {
   RESET: "game/reset",
   LETTERS_STATUS: "setLetterStatus",
   CLOSE_MODAL: "modal/close",
+  TOGGLE_MODE: "theme/toggle",
 };

@@ -176,6 +176,9 @@ function reducer(state, action) {
     case ACTION_TYPES.CLOSE_MODAL: {
       return { ...state, showModal: false };
     }
+    case ACTION_TYPES.TOGGLE_MODE: {
+      return { ...state, darkMode: !state.darkMode };
+    }
     default:
       throw new Error("Wrong action type!");
   }
@@ -195,6 +198,7 @@ const initialState = {
   lettersStatus: [],
   showMessage: { show: false, content: "" },
   showModal: false,
+  darkMode: false,
 };
 
 export default function App() {
@@ -208,6 +212,7 @@ export default function App() {
       showMessage,
       showModal,
       status,
+      darkMode,
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -244,7 +249,11 @@ export default function App() {
   return (
     <>
       <div className="app">
-        <Navigation onReset={handleReset} />
+        <Navigation
+          onReset={handleReset}
+          dispatch={dispatch}
+          darkMode={darkMode}
+        />
         <div className="board">
           {guesses.map((guess, i) => (
             <Line
