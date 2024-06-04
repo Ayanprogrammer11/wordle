@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useReducer } from "react";
 import "./App.css";
 import Line from "./Line";
-import { generateRandomWord } from "./utils";
+import { generateRandomWord, provideWords, words } from "./utils";
 import Keyboard from "./Keyboard";
 import Navigation from "./components/Navigation/Navigation";
 import { ACTION_TYPES } from "./actions/index";
+import Button from "./components/Button/Button";
+import { IoLogoGithub } from "react-icons/io5";
+import Message from "./components/Message/Message";
+import Modal from "./components/Modal/Modal";
+import { FaArrowRight } from "react-icons/fa";
 
 function reducer(state, action) {
   function putInput(keyEntered) {
@@ -34,6 +39,14 @@ function reducer(state, action) {
       };
     }
     case ACTION_TYPES.INPUT: {
+      // FOR MANAGING MESSAGE
+      if (state.showMessage.show) {
+        return {
+          ...state,
+          showMessage: { ...state.showMessage, show: false, content: "" },
+        };
+      }
+
       if (action.payload.isNative === false) {
         return putInput(action.payload.keystroke);
       }
@@ -50,11 +63,31 @@ function reducer(state, action) {
       // Return if the user presses enter before completing a line
       if (state.currentGuess.tile !== 5) {
         console.log("NO ENTER BEFORE COMPLETING A LINE");
-        return state;
+        return {
+          ...state,
+          showMessage: {
+            ...state.showMessage,
+            show: true,
+            content: "NO ENTER BEFORE COMPLETING A LINE",
+          },
+        };
       }
 
       if (state.currentGuess.line < 6) {
         const currentWord = state.guesses[state.currentGuess.line];
+        if (
+          !provideWords().some((word) => word.toUpperCase() === currentWord)
+        ) {
+          return {
+            ...state,
+
+            showMessage: {
+              ...state.showMessage,
+              show: true,
+              content: "No word found!",
+            },
+          };
+        }
         if (state.solution === currentWord) {
           console.log("WIN!");
           return {
@@ -66,6 +99,7 @@ function reducer(state, action) {
               line: Infinity,
               tile: 0,
             },
+            showModal: true,
           };
         }
 
@@ -81,6 +115,7 @@ function reducer(state, action) {
               line: Infinity,
               tile: 0,
             },
+            showModal: true,
           };
         }
 
@@ -138,6 +173,9 @@ function reducer(state, action) {
         lettersStatus: [...state.lettersStatus, action.payload],
       };
     }
+    case ACTION_TYPES.CLOSE_MODAL: {
+      return { ...state, showModal: false };
+    }
     default:
       throw new Error("Wrong action type!");
   }
@@ -155,11 +193,22 @@ const initialState = {
   solution: generateRandomWord(),
   //  {status: "", letter: ""}
   lettersStatus: [],
+  showMessage: { show: false, content: "" },
+  showModal: false,
 };
 
 export default function App() {
   const [
-    { guesses, currentGuess, solution, gameOver, lettersStatus },
+    {
+      guesses,
+      currentGuess,
+      solution,
+      gameOver,
+      lettersStatus,
+      showMessage,
+      showModal,
+      status,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -214,7 +263,35 @@ export default function App() {
             gameOver={gameOver}
             lettersStatus={lettersStatus}
           />
+          {showMessage.show && <Message>{showMessage.content}</Message>}
+          <Modal
+            isOpen={showModal}
+            onClose={() => dispatch({ type: ACTION_TYPES.CLOSE_MODAL })}
+            status={status}
+          >
+            <p>
+              The correct word was: <code>{solution}</code>
+            </p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                onClick={() => {
+                  dispatch({ type: ACTION_TYPES.RESET });
+                  dispatch({ type: ACTION_TYPES.CLOSE_MODAL });
+                }}
+                className="btn"
+              >
+                Play Again
+                <FaArrowRight className="icons" />
+              </Button>
+            </div>
+          </Modal>
         </div>
+        <a href="https://github.com/AyanProgrammer11" target="_blank">
+          <Button className="btn btn-github">
+            <IoLogoGithub className="icons" />
+            <span>Github</span>
+          </Button>
+        </a>
       </div>
     </>
   );

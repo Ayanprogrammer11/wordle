@@ -5,4 +5,5 @@ export const ACTION_TYPES = {
   DELETE_INPUT: "board/deleteInput",
   RESET: "game/reset",
   LETTERS_STATUS: "setLetterStatus",
+  CLOSE_MODAL: "modal/close",
 };

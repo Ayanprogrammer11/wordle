@@ -19,7 +19,7 @@ body {
   --active-tile: #a7adc0;
 
   --keystroke-background: #dce1ed;
-  --keystroke-text: #363e52;
+  --text-color: #363e52;
   --keystroke-hover-background: #c4cbdd;
 
   --icons-color: #414a5e;
@@ -127,7 +127,7 @@ body {
   border-radius: 4px;
   font-weight: 600;
   font-size: 14px;
-  color: var(--keystroke-text);
+  color: var(--text-color);
   transition: background 0.2s;
   cursor: pointer;
 }
@@ -185,16 +185,6 @@ body {
   font-size: 17px;
   font-weight: 600;
 } */
-
-.icons {
-  font-size: 20px;
-  display: inline !important;
-  color: var(--icons-color);
-  transition: all 0.25s;
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
-}
 
 @media screen and (min-width: 550px) {
   .key-stroke {

@@ -1,0 +1,34 @@
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background: rgb(255, 255, 255);
+  /* box-shadow: 0 0 0 500px rgb(255 255 255 / 50%), 0 0 50px rgb(0 0 0 / 40%); */
+  box-shadow: 0 3rem 5.8rem rgba(0, 0, 0, 0.2);
+  min-width: 300px;
+  color: var(--text-color);
+  height: 80px;
+  border-radius: 10px;
+  padding: 30px 10px;
+}
+.message.hidden {
+  display: none;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.message__content-container {
+  display: flex;
+  text-align: center;
+
+  flex-direction: column;
+}
+
+.message__info {
+  text-align: center;
+  margin-top: 16px;
+}
