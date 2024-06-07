@@ -14,7 +14,7 @@
   transition: all 0.25s;
 }
 
-.btn .icons {
+.icons {
   font-size: 20px;
   display: inline !important;
   color: var(--icons-color);

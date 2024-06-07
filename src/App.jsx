@@ -275,7 +275,9 @@ export default function App() {
           {showMessage.show && <Message>{showMessage.content}</Message>}
           <Modal
             isOpen={showModal}
-            onClose={() => dispatch({ type: ACTION_TYPES.CLOSE_MODAL })}
+            onClose={() => {
+              dispatch({ type: ACTION_TYPES.CLOSE_MODAL });
+            }}
             status={status}
           >
             <p>
@@ -286,6 +288,10 @@ export default function App() {
                 onClick={() => {
                   dispatch({ type: ACTION_TYPES.RESET });
                   dispatch({ type: ACTION_TYPES.CLOSE_MODAL });
+                  dispatch({
+                    type: ACTION_TYPES.SET_WORD,
+                    payload: generateRandomWord(),
+                  });
                 }}
                 className="btn"
               >
