@@ -46,6 +46,16 @@ function Line({ index, guess, currentGuess, gameOver, solution, dispatch }) {
             className += " incorrect";
             statusUpdates.push({ status: "incorrect", char });
           }
+        } else if (
+          currentGuess.tile > 0 &&
+          index === currentGuess.line &&
+          i ===
+            (currentGuess.tile > 0
+              ? currentGuess.tile - 1
+              : currentGuess.tile) &&
+          !gameOver
+        ) {
+          className += " active";
         }
 
         return (
