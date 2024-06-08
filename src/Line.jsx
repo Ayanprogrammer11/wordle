@@ -1,8 +1,16 @@
 import React, { useEffect, useMemo } from "react";
 import { ACTION_TYPES } from "./actions/index";
-const WORD_LENGTH = 5;
+// const WORD_LENGTH = 5;
 
-function Line({ index, guess, currentGuess, gameOver, solution, dispatch }) {
+function Line({
+  index,
+  guess,
+  currentGuess,
+  gameOver,
+  solution,
+  dispatch,
+  WORD_LENGTH,
+}) {
   const { tiles, keyboardStatusUpdates } = useMemo(() => {
     const correctPositions = Array(WORD_LENGTH).fill(false);
     const wrongPositions = Array(WORD_LENGTH).fill(false);
@@ -66,7 +74,7 @@ function Line({ index, guess, currentGuess, gameOver, solution, dispatch }) {
       });
 
     return { tiles: tileElements, keyboardStatusUpdates: statusUpdates };
-  }, [index, guess, currentGuess, solution]);
+  }, [index, guess, currentGuess, solution, WORD_LENGTH]);
 
   useEffect(
     function () {

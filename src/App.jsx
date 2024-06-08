@@ -13,7 +13,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 function reducer(state, action) {
   function putInput(keyEntered) {
-    if (state.currentGuess.tile < 5) {
+    if (state.currentGuess.tile < state.wordLength) {
       let guessCopy = [...state.guesses];
       guessCopy[state.currentGuess.line] += keyEntered;
       console.log("KEY ENTERED:", keyEntered);
@@ -36,6 +36,13 @@ function reducer(state, action) {
         ...state,
         solution: action.payload,
         status: "playing",
+      };
+    }
+    case ACTION_TYPES.SET_WORD_LENGTH: {
+      return {
+        ...state,
+        wordLength: action.payload,
+        solution: generateRandomWord(action.payload),
       };
     }
     case ACTION_TYPES.INPUT: {
@@ -61,7 +68,7 @@ function reducer(state, action) {
     }
     case ACTION_TYPES.ENTER: {
       // Return if the user presses enter before completing a line
-      if (state.currentGuess.tile !== 5) {
+      if (state.currentGuess.tile !== state.wordLength) {
         console.log("NO ENTER BEFORE COMPLETING A LINE");
         return {
           ...state,
@@ -76,7 +83,9 @@ function reducer(state, action) {
       if (state.currentGuess.line < 6) {
         const currentWord = state.guesses[state.currentGuess.line];
         if (
-          !provideWords().some((word) => word.toUpperCase() === currentWord)
+          !provideWords(state.wordLength).some(
+            (word) => word.toUpperCase() === currentWord
+          )
         ) {
           return {
             ...state,
@@ -176,6 +185,9 @@ function reducer(state, action) {
     case ACTION_TYPES.CLOSE_MODAL: {
       return { ...state, showModal: false };
     }
+    case ACTION_TYPES.OPEN_MODAL: {
+      return { ...state, showModal: true };
+    }
     case ACTION_TYPES.TOGGLE_MODE: {
       return { ...state, darkMode: !state.darkMode };
     }
@@ -185,6 +197,7 @@ function reducer(state, action) {
 }
 
 const initialState = {
+  wordLength: 5,
   guesses: Array(6).fill(""),
   currentGuess: {
     line: 0,
@@ -193,7 +206,7 @@ const initialState = {
   gameOver: false,
   // Different statuses: "playing", "win", "lose"
   status: "playing",
-  solution: generateRandomWord(),
+  solution: null,
   //  {status: "", letter: ""}
   lettersStatus: [],
   showMessage: { show: false, content: "" },
@@ -204,6 +217,7 @@ const initialState = {
 export default function App() {
   const [
     {
+      wordLength,
       guesses,
       currentGuess,
       solution,
@@ -246,6 +260,13 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleInput);
   }, [gameOver, handleInput]);
 
+  useEffect(function () {
+    dispatch({
+      type: ACTION_TYPES.SET_WORD,
+      payload: generateRandomWord(wordLength),
+    });
+  }, []);
+
   return (
     <>
       <div className="app">
@@ -253,6 +274,8 @@ export default function App() {
           onReset={handleReset}
           dispatch={dispatch}
           darkMode={darkMode}
+          showModal={showModal}
+          wordLength={wordLength}
         />
         <div className="board">
           {guesses.map((guess, i) => (
@@ -265,6 +288,7 @@ export default function App() {
               gameOver={gameOver}
               dispatch={dispatch}
               lettersStatus={lettersStatus}
+              WORD_LENGTH={wordLength}
             />
           ))}
           <Keyboard

@@ -32,22 +32,7 @@ const Modal = ({ isOpen, onClose, status, children }) => {
                 textAlign: "center",
                 flex: "1",
               }}
-            >
-              <span style={{ marginRight: "10px", verticalAlign: "middle" }}>
-                You {status === "win" ? "WON" : "LOST"}
-              </span>
-              {status === "win" ? (
-                <customicon className="icons" style={{ fontSize: "30px" }}>
-                  🎉
-                </customicon>
-              ) : (
-                <HiOutlineEmojiSad
-                  className="icons"
-                  fontSize={24}
-                  style={{ verticalAlign: "middle" }}
-                />
-              )}
-            </h3>
+            ></h3>
             <button onClick={handleClose} className="modal-close">
               <LiaTimesSolid className="icons" />
             </button>

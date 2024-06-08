@@ -219890,8 +219890,8 @@ export const keyboard = [
   { key: "Enter", code: "Enter" },
 ];
 
-export function generateRandomWord() {
-  const filteredWords = words.filter((word) => word.length === 5);
+export function generateRandomWord(WORD_LENGTH) {
+  const filteredWords = words.filter((word) => word.length === WORD_LENGTH);
   return filteredWords[
     Math.floor(Math.random() * filteredWords.length)
   ].toUpperCase();
@@ -219899,8 +219899,8 @@ export function generateRandomWord() {
 
 
 // This function should defninitely be scalable as the input size (array length) increases.
-export function provideWords() {
-  return words.filter((word) => word.length === 5);
+export function provideWords(WORD_LENGTH) {
+  return words.filter((word) => word.length === WORD_LENGTH);
 }
 
 // O(n)

@@ -10,8 +10,12 @@ import { MdNightlight } from "react-icons/md";
 import { VscDebugRestart } from "react-icons/vsc";
 import { ACTION_TYPES } from "../../actions/index";
 import Button from "../Button/Button";
-import { useEffect } from "react";
-function Navigation({ onReset, dispatch, darkMode }) {
+import { useEffect, useState } from "react";
+import Modal from "../Modal/Modal";
+import RangeInput from "../RangeInput/RangeInput";
+
+function Navigation({ onReset, dispatch, darkMode, wordLength, showModal }) {
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   useEffect(
     function () {
       const html = document.getElementsByTagName("html")[0];
@@ -22,45 +26,57 @@ function Navigation({ onReset, dispatch, darkMode }) {
     [darkMode]
   );
   return (
-    <nav className="nav">
-      <div className="nav__utils">
-        <div className="nav__additional">
-          {/* <div className="nav__settings">
-            <Button className="nav__btn btn">
-              <IoSettingsSharp className="icons" />
-              <span>Settings</span>
-            </Button>
+    <>
+      <nav className="nav">
+        <div className="nav__utils">
+          <div className="nav__additional">
+            <div className="nav__settings">
+              <Button
+                className="nav__btn btn"
+                onClick={() => setShowSettingsModal(true)}
+              >
+                <IoSettingsSharp className="icons" />
+                <span>Settings</span>
+              </Button>
+            </div>
+            {/* <div className="challenge">
+              <Button className="nav__btn btn">
+                <IoAddCircleOutline className="icons" />
+                <span>Challenge</span>
+              </Button>
+            </div> */}
+            <div className="dark-mode">
+              <Button
+                className={"btn btn-toggleMode"}
+                onClick={() => dispatch({ type: ACTION_TYPES.TOGGLE_MODE })}
+              >
+                {darkMode ? (
+                  <MdNightlight className="icons" />
+                ) : (
+                  <MdOutlineDarkMode className="icons" />
+                )}
+              </Button>
+            </div>
           </div>
-          <div className="challenge">
-            <Button className="nav__btn btn">
-              <IoAddCircleOutline className="icons" />
-              <span>Challenge</span>
-            </Button>
-          </div> */}
-          <div className="dark-mode">
-            <Button
-              className={"btn btn-toggleMode"}
-              onClick={() => dispatch({ type: ACTION_TYPES.TOGGLE_MODE })}
-            >
-              {darkMode ? (
-                <MdNightlight className="icons" />
-              ) : (
-                <MdOutlineDarkMode className="icons" />
-              )}
-            </Button>
-          </div>
-        </div>
 
-        <div className="nav__main">
-          <div className="new-game">
-            <Button className="nav__btn btn" onClick={onReset}>
-              <VscDebugRestart className="icons" />
-              <span>New Game</span>
-            </Button>
+          <div className="nav__main">
+            <div className="new-game">
+              <Button className="nav__btn btn" onClick={onReset}>
+                <VscDebugRestart className="icons" />
+                <span>New Game</span>
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      <Modal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+      >
+        <RangeInput dispatch={dispatch} wordLength={wordLength} />
+      </Modal>
+    </>
   );
 }
 
