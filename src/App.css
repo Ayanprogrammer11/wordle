@@ -85,9 +85,25 @@ body {
   justify-content: center;
   align-items: center;
   font-family: sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   transition: background-color 0.5s;
+}
+
+.tile span.visible {
+  animation: tileAnimation 0.3s ease-out;
+}
+
+@keyframes tileAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .tile.active {
@@ -155,17 +171,22 @@ body {
   cursor: pointer;
 }
 
+/* FOR BACKSPACE */
 .key-stroke[data-isSpecial="true"] {
   grid-column: span 2;
   grid-row: 3 / 4;
 }
-
+/* FOR ENTER */
 .key-stroke:last-child {
   grid-column: -3 / -1;
 }
 
 .key-stroke:hover {
   background: var(--keystroke-hover-background);
+}
+
+.hidden {
+  opacity: 0 !important;
 }
 
 .loader {
@@ -204,15 +225,11 @@ body {
   }
 }
 
-/* .btn:not(:has(svg)) {
-  font-size: 17px;
-  font-weight: 600;
-} */
-
+/* MEDIA QUERIES */
 @media screen and (min-width: 550px) {
   .key-stroke {
     min-width: 50px;
-    font-size: 16px;
+    font-size: 20px;
   }
 }
 
@@ -224,11 +241,14 @@ body {
     min-width: 55px;
     font-size: 16px;
   }
+  .tile {
+    font-size: 20px;
+  }
 }
 
 @media screen and (min-width: 1024px) {
   .tile {
-    font-size: 20px;
+    font-size: 22px;
   }
   .key-stroke {
     min-width: 65px;

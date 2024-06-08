@@ -219897,6 +219897,11 @@ export function generateRandomWord() {
   ].toUpperCase();
 }
 
+
+// This function should defninitely be scalable as the input size (array length) increases.
 export function provideWords() {
   return words.filter((word) => word.length === 5);
 }
+
+// O(n)
+// O(n)
