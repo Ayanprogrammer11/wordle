@@ -43,6 +43,11 @@ function reducer(state, action) {
         ...state,
         wordLength: action.payload,
         solution: generateRandomWord(action.payload),
+        gameOver: false,
+        currentGuess: { tile: 0, line: 0 },
+        lettersStatus: [],
+        status: "playing",
+        guesses: Array(6).fill(""),
       };
     }
     case ACTION_TYPES.INPUT: {
@@ -75,7 +80,27 @@ function reducer(state, action) {
           showMessage: {
             ...state.showMessage,
             show: true,
-            content: "NO ENTER BEFORE COMPLETING A LINE",
+            content: "GUESS THE WORD FIRST",
+          },
+        };
+      }
+
+      // Return if the word is already guessed
+      if (
+        state.guesses
+          .filter((_, i) => i !== state.currentGuess.line)
+          .some(
+            (word) =>
+              word === state.guesses[state.currentGuess.line] &&
+              state.currentGuess.line > 0
+          )
+      ) {
+        return {
+          ...state,
+          showMessage: {
+            ...state.showMessage,
+            show: true,
+            content: "WORD ALREADY GUESSED",
           },
         };
       }
@@ -211,7 +236,7 @@ const initialState = {
   lettersStatus: [],
   showMessage: { show: false, content: "" },
   showModal: false,
-  darkMode: false,
+  darkMode: JSON.parse(localStorage.getItem("darkmode")) || false,
 };
 
 export default function App() {
@@ -233,7 +258,10 @@ export default function App() {
 
   function handleReset() {
     dispatch({ type: ACTION_TYPES.RESET });
-    dispatch({ type: ACTION_TYPES.SET_WORD, payload: generateRandomWord() });
+    dispatch({
+      type: ACTION_TYPES.SET_WORD,
+      payload: generateRandomWord(wordLength),
+    });
   }
 
   const handleInput = useCallback(
@@ -312,10 +340,12 @@ export default function App() {
                 onClick={() => {
                   dispatch({ type: ACTION_TYPES.RESET });
                   dispatch({ type: ACTION_TYPES.CLOSE_MODAL });
-                  dispatch({
-                    type: ACTION_TYPES.SET_WORD,
-                    payload: generateRandomWord(),
-                  });
+                  setTimeout(function () {
+                    dispatch({
+                      type: ACTION_TYPES.SET_WORD,
+                      payload: generateRandomWord(wordLength),
+                    });
+                  }, 500);
                 }}
                 className="btn"
               >
@@ -325,12 +355,12 @@ export default function App() {
             </div>
           </Modal>
         </div>
-        <a href="https://github.com/AyanProgrammer11" target="_blank">
+        {/* <a href="https://github.com/AyanProgrammer11" target="_blank">
           <Button className="btn btn-github">
             <IoLogoGithub className="icons" />
             <span>Github</span>
           </Button>
-        </a>
+        </a> */}
       </div>
     </>
   );

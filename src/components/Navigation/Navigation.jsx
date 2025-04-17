@@ -22,6 +22,8 @@ function Navigation({ onReset, dispatch, darkMode, wordLength, showModal }) {
       darkMode === true
         ? html.classList.add("dark")
         : html.classList.remove("dark");
+
+      localStorage.setItem("darkmode", JSON.stringify(darkMode));
     },
     [darkMode]
   );
@@ -31,16 +33,16 @@ function Navigation({ onReset, dispatch, darkMode, wordLength, showModal }) {
         <div className="nav__utils">
           <div className="nav__additional">
             <div className="nav__settings">
-              <Button
-                className="nav__btn btn"
+              {/* <Button
+                className="btn nav__btn"
                 onClick={() => setShowSettingsModal(true)}
               >
                 <IoSettingsSharp className="icons" />
                 <span>Settings</span>
-              </Button>
+              </Button> */}
             </div>
             {/* <div className="challenge">
-              <Button className="nav__btn btn">
+              <Button className="btn nav__btn">
                 <IoAddCircleOutline className="icons" />
                 <span>Challenge</span>
               </Button>
@@ -61,7 +63,7 @@ function Navigation({ onReset, dispatch, darkMode, wordLength, showModal }) {
 
           <div className="nav__main">
             <div className="new-game">
-              <Button className="nav__btn btn" onClick={onReset}>
+              <Button className="btn nav__btn" onClick={onReset}>
                 <VscDebugRestart className="icons" />
                 <span>New Game</span>
               </Button>
