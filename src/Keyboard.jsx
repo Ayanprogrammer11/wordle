@@ -47,7 +47,7 @@ function Keyboard({ gameOver, dispatch, lettersStatus }) {
                     })
             }
             key={keystroke.key}
-            aria-label={keystroke.key === "$special$" ? "Backspace key" : `Letter ${keystroke.key}`}
+            aria-label={keystroke.key === "$special$" ? "Backspace key" : `Key ${keystroke.key.toUpperCase()}`}
           >
             {keystroke.key === "$special$" ? (
               <IoBackspaceOutline fontSize={30} />

@@ -5,6 +5,8 @@ import "./Modal.css";
 
 const Modal = ({ isOpen, onClose, status, children }) => {
   const [showModal, setShowModal] = useState(false);
+  const modalTitle =
+    status === "win" ? "You Won! 🎉" : status === "lose" ? "Game Over" : "";
 
   useEffect(() => {
     setShowModal(isOpen);
@@ -37,7 +39,7 @@ const Modal = ({ isOpen, onClose, status, children }) => {
                 flex: "1",
               }}
             >
-              {status === "win" ? "You Won! 🎉" : status === "lose" ? "Game Over" : ""}
+              {modalTitle}
             </h3>
             <button
               onClick={handleClose}
