@@ -87,7 +87,7 @@ function Line({
       });
 
     return { tiles: tileElements, keyboardStatusUpdates: statusUpdates };
-  }, [index, guess, currentGuess, solution, WORD_LENGTH, gameOver]);
+  }, [index, guess, currentGuess, solution, WORD_LENGTH]);
 
   useEffect(
     function () {
