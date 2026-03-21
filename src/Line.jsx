@@ -69,7 +69,17 @@ function Line({
             key={i}
             className={className}
             role="img"
-            aria-label={`Tile ${i + 1}: ${char || "empty"}`}
+            aria-label={`Letter ${i + 1}: ${char || "empty"}, ${
+              className.includes("correct")
+                ? "correct"
+                : className.includes("wrong-position")
+                ? "present"
+                : className.includes("incorrect")
+                ? "absent"
+                : className.includes("active")
+                ? "active"
+                : "unrevealed"
+            }`}
           >
             <span className={char ? "visible" : "hidden"}>{char}</span>
           </div>
