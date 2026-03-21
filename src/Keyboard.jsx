@@ -3,28 +3,33 @@ import { IoBackspaceOutline } from "react-icons/io5";
 import { ACTION_TYPES } from "./actions/index";
 
 function Keyboard({ gameOver, dispatch, lettersStatus }) {
+  const statusPriority = {
+    correct: 3,
+    "wrong-position": 2,
+    incorrect: 1,
+  };
+
   return (
     <div className="keyboard">
       {keyboard.map((keystroke) => {
-        const letterStatus = lettersStatus.find(
-          (status) => status.letter === keystroke.key
-        );
+        const letterStatus = lettersStatus
+          .filter((status) => status.letter === keystroke.key)
+          .reduce(
+            (bestStatus, currentStatus) =>
+              statusPriority[currentStatus.status] >
+              statusPriority[bestStatus.status]
+                ? currentStatus
+                : bestStatus,
+            { status: null }
+          );
 
         let className = "key-stroke";
-        if (letterStatus) {
-          // Check for "correct" first (highest priority)
-          if (letterStatus.status === "correct") {
-            className += " correct";
-          } else if (letterStatus.status === "wrong-position") {
-            // If previously wrong-position, check all previous guesses for "correct" with the same letter
-            const isPreviouslyCorrect = lettersStatus.some(
-              (prevStatus) =>
-                prevStatus.letter === keystroke.key &&
-                prevStatus.status === "correct"
-            );
-
-            className += isPreviouslyCorrect ? " correct" : " wrong-position";
-          }
+        if (letterStatus.status === "correct") {
+          className += " correct";
+        } else if (letterStatus.status === "wrong-position") {
+          className += " wrong-position";
+        } else if (letterStatus.status === "incorrect") {
+          className += " incorrect";
         }
 
         return (
