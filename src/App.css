@@ -50,7 +50,7 @@ body {
   color: var(--text-color);
 }
 
-.App {
+.app {
   font-family: sans-serif;
   text-align: center;
   min-height: 100vh;
