@@ -74,7 +74,11 @@ function Line({
             key={i}
             className={className}
             role="gridcell"
-            aria-label={`Letter ${i + 1}: ${char || "empty"}, ${tileState}`}
+            aria-label={
+              tileState === "unrevealed" && !char
+                ? undefined
+                : `Letter ${i + 1}: ${char || "empty"}, ${tileState}`
+            }
           >
             <span className={char ? "visible" : "hidden"}>{char}</span>
           </div>
