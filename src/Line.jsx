@@ -40,16 +40,20 @@ function Line({
       .map((_, i) => {
         let className = "tile";
         const char = guess[i];
+        let tileState = "unrevealed";
 
         if (currentGuess.line > index) {
           if (correctPositions[i]) {
             className += " correct";
+            tileState = "correct";
             statusUpdates.push({ status: "correct", char });
           } else if (wrongPositions[i] && !gameOver) {
             className += " wrong-position";
+            tileState = "present";
             statusUpdates.push({ status: "wrong-position", char });
           } else {
             className += " incorrect";
+            tileState = "absent";
             statusUpdates.push({ status: "incorrect", char });
           }
         } else if (
@@ -62,6 +66,7 @@ function Line({
           !gameOver
         ) {
           className += " active";
+          tileState = "active";
         }
 
         return (
@@ -69,17 +74,7 @@ function Line({
             key={i}
             className={className}
             role="img"
-            aria-label={`Letter ${i + 1}: ${char || "empty"}, ${
-              className.includes("correct")
-                ? "correct"
-                : className.includes("wrong-position")
-                ? "present"
-                : className.includes("incorrect")
-                ? "absent"
-                : className.includes("active")
-                ? "active"
-                : "unrevealed"
-            }`}
+            aria-label={`Letter ${i + 1}: ${char || "empty"}, ${tileState}`}
           >
             <span className={char ? "visible" : "hidden"}>{char}</span>
           </div>
