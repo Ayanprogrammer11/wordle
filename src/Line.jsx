@@ -14,26 +14,25 @@ function Line({
   const { tiles, keyboardStatusUpdates } = useMemo(() => {
     const correctPositions = Array(WORD_LENGTH).fill(false);
     const wrongPositions = Array(WORD_LENGTH).fill(false);
+    const remainingCharsCount = {};
     const statusUpdates = [];
 
-    // First pass: mark correct positions
+    // First pass: mark correct positions and collect remaining solution chars
     guess.split("").forEach((char, i) => {
       if (char === solution[i]) {
         correctPositions[i] = true;
+      } else {
+        const solutionChar = solution[i];
+        remainingCharsCount[solutionChar] =
+          (remainingCharsCount[solutionChar] || 0) + 1;
       }
     });
 
     // Second pass: mark wrong positions
     guess.split("").forEach((char, i) => {
-      if (!correctPositions[i] && solution.includes(char)) {
-        const charIndex = solution.indexOf(char);
-
-        if (
-          !correctPositions[charIndex] &&
-          !wrongPositions.includes(charIndex)
-        ) {
-          wrongPositions[i] = true;
-        }
+      if (!correctPositions[i] && remainingCharsCount[char] > 0) {
+        wrongPositions[i] = true;
+        remainingCharsCount[char] -= 1;
       }
     });
 
@@ -47,7 +46,7 @@ function Line({
           if (correctPositions[i]) {
             className += " correct";
             statusUpdates.push({ status: "correct", char });
-          } else if (wrongPositions[i] && !gameOver) {
+          } else if (wrongPositions[i]) {
             className += " wrong-position";
             statusUpdates.push({ status: "wrong-position", char });
           } else {
