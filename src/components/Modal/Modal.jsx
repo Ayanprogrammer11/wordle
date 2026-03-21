@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { LiaTimesSolid } from "react-icons/lia";
-import { HiOutlineEmojiSad } from "react-icons/hi";
-import { LuPartyPopper } from "react-icons/lu";
 import "./Modal.css";
 
 const Modal = ({ isOpen, onClose, status, children }) => {
@@ -24,16 +22,28 @@ const Modal = ({ isOpen, onClose, status, children }) => {
       classNames="modal"
       unmountOnExit
     >
-      <div className="modal-overlay">
+      <div
+        className="modal-overlay"
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-modal="true"
+      >
         <div className="modal-content">
           <div className="modal-header">
             <h3
+              id="modal-title"
               style={{
                 textAlign: "center",
                 flex: "1",
               }}
-            ></h3>
-            <button onClick={handleClose} className="modal-close">
+            >
+              {status === "win" ? "You Won! 🎉" : status === "lose" ? "Game Over" : ""}
+            </h3>
+            <button
+              onClick={handleClose}
+              className="modal-close"
+              aria-label="Close modal"
+            >
               <LiaTimesSolid className="icons" />
             </button>
           </div>

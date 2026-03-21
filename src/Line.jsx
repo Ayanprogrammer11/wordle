@@ -12,28 +12,26 @@ function Line({
   WORD_LENGTH,
 }) {
   const { tiles, keyboardStatusUpdates } = useMemo(() => {
+    const solutionChars = solution?.split("") || [];
+    const remainingChars = {};
     const correctPositions = Array(WORD_LENGTH).fill(false);
     const wrongPositions = Array(WORD_LENGTH).fill(false);
     const statusUpdates = [];
 
     // First pass: mark correct positions
     guess.split("").forEach((char, i) => {
-      if (char === solution[i]) {
+      if (char === solutionChars[i]) {
         correctPositions[i] = true;
+      } else if (solutionChars[i]) {
+        remainingChars[solutionChars[i]] = (remainingChars[solutionChars[i]] || 0) + 1;
       }
     });
 
     // Second pass: mark wrong positions
     guess.split("").forEach((char, i) => {
-      if (!correctPositions[i] && solution.includes(char)) {
-        const charIndex = solution.indexOf(char);
-
-        if (
-          !correctPositions[charIndex] &&
-          !wrongPositions.includes(charIndex)
-        ) {
-          wrongPositions[i] = true;
-        }
+      if (!correctPositions[i] && remainingChars[char] > 0) {
+        wrongPositions[i] = true;
+        remainingChars[char] -= 1;
       }
     });
 
@@ -67,14 +65,19 @@ function Line({
         }
 
         return (
-          <div key={i} className={className}>
+          <div
+            key={i}
+            className={className}
+            role="img"
+            aria-label={`Tile ${i + 1}: ${char || "empty"}`}
+          >
             <span className={char ? "visible" : "hidden"}>{char}</span>
           </div>
         );
       });
 
     return { tiles: tileElements, keyboardStatusUpdates: statusUpdates };
-  }, [index, guess, currentGuess, solution, WORD_LENGTH]);
+  }, [index, guess, currentGuess, solution, WORD_LENGTH, gameOver]);
 
   useEffect(
     function () {
