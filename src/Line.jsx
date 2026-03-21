@@ -73,7 +73,7 @@ function Line({
           <div
             key={i}
             className={className}
-            role="img"
+            role="gridcell"
             aria-label={`Letter ${i + 1}: ${char || "empty"}, ${tileState}`}
           >
             <span className={char ? "visible" : "hidden"}>{char}</span>
@@ -96,7 +96,7 @@ function Line({
     [keyboardStatusUpdates, dispatch]
   );
 
-  return <div className="line">{tiles}</div>;
+  return <div className="line" role="row">{tiles}</div>;
 }
 
 export default Line;

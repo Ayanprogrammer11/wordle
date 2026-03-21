@@ -306,19 +306,21 @@ export default function App() {
           wordLength={wordLength}
         />
         <div className="board">
-          {guesses.map((guess, i) => (
-            <Line
-              guess={guess}
-              index={i}
-              key={i}
-              currentGuess={currentGuess}
-              solution={solution}
-              gameOver={gameOver}
-              dispatch={dispatch}
-              lettersStatus={lettersStatus}
-              WORD_LENGTH={wordLength}
-            />
-          ))}
+          <div className="boardWrapper" role="grid" aria-label="Word board">
+            {guesses.map((guess, i) => (
+              <Line
+                guess={guess}
+                index={i}
+                key={i}
+                currentGuess={currentGuess}
+                solution={solution}
+                gameOver={gameOver}
+                dispatch={dispatch}
+                lettersStatus={lettersStatus}
+                WORD_LENGTH={wordLength}
+              />
+            ))}
+          </div>
           <Keyboard
             dispatch={dispatch}
             gameOver={gameOver}
