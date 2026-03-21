@@ -48,8 +48,9 @@
 }
 
 .modal-content p code {
-  background: gray;
+  background: var(--keystroke-background);
   padding: 5px;
+  border-radius: 4px;
 }
 
 /* Animation styles */
@@ -78,5 +79,14 @@
 @media screen and (min-width: 640px) {
   .modal-content {
     max-width: 60vw;
+  }
+}
+
+@media screen and (max-width: 549px) {
+  .modal-content {
+    width: 95vw;
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
   }
 }

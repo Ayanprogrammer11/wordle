@@ -28,7 +28,8 @@ function Keyboard({ gameOver, dispatch, lettersStatus }) {
         }
 
         return (
-          <div
+          <button
+            type="button"
             className={className}
             data-isspecial={keystroke.key === "$special$"}
             onClick={
@@ -46,13 +47,14 @@ function Keyboard({ gameOver, dispatch, lettersStatus }) {
                     })
             }
             key={keystroke.key}
+            aria-label={keystroke.key === "$special$" ? "Backspace key" : undefined}
           >
             {keystroke.key === "$special$" ? (
               <IoBackspaceOutline fontSize={30} />
             ) : (
               keystroke.key
             )}
-          </div>
+          </button>
         );
       })}
     </div>

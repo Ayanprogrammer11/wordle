@@ -12,28 +12,26 @@ function Line({
   WORD_LENGTH,
 }) {
   const { tiles, keyboardStatusUpdates } = useMemo(() => {
+    const solutionChars = solution?.split("") || [];
+    const remainingChars = {};
     const correctPositions = Array(WORD_LENGTH).fill(false);
     const wrongPositions = Array(WORD_LENGTH).fill(false);
     const statusUpdates = [];
 
     // First pass: mark correct positions
     guess.split("").forEach((char, i) => {
-      if (char === solution[i]) {
+      if (char === solutionChars[i]) {
         correctPositions[i] = true;
+      } else if (solutionChars[i]) {
+        remainingChars[solutionChars[i]] = (remainingChars[solutionChars[i]] || 0) + 1;
       }
     });
 
     // Second pass: mark wrong positions
     guess.split("").forEach((char, i) => {
-      if (!correctPositions[i] && solution.includes(char)) {
-        const charIndex = solution.indexOf(char);
-
-        if (
-          !correctPositions[charIndex] &&
-          !wrongPositions.includes(charIndex)
-        ) {
-          wrongPositions[i] = true;
-        }
+      if (!correctPositions[i] && remainingChars[char] > 0) {
+        wrongPositions[i] = true;
+        remainingChars[char] -= 1;
       }
     });
 
@@ -42,16 +40,20 @@ function Line({
       .map((_, i) => {
         let className = "tile";
         const char = guess[i];
+        let tileState = "unrevealed";
 
         if (currentGuess.line > index) {
           if (correctPositions[i]) {
             className += " correct";
+            tileState = "correct";
             statusUpdates.push({ status: "correct", char });
           } else if (wrongPositions[i] && !gameOver) {
             className += " wrong-position";
+            tileState = "present";
             statusUpdates.push({ status: "wrong-position", char });
           } else {
             className += " incorrect";
+            tileState = "absent";
             statusUpdates.push({ status: "incorrect", char });
           }
         } else if (
@@ -64,10 +66,20 @@ function Line({
           !gameOver
         ) {
           className += " active";
+          tileState = "active";
         }
 
         return (
-          <div key={i} className={className}>
+          <div
+            key={i}
+            className={className}
+            role="gridcell"
+            aria-label={
+              tileState === "unrevealed" && !char
+                ? undefined
+                : `Letter ${i + 1}: ${char || "empty"}, ${tileState}`
+            }
+          >
             <span className={char ? "visible" : "hidden"}>{char}</span>
           </div>
         );
@@ -88,7 +100,7 @@ function Line({
     [keyboardStatusUpdates, dispatch]
   );
 
-  return <div className="line">{tiles}</div>;
+  return <div className="line" role="row">{tiles}</div>;
 }
 
 export default Line;
